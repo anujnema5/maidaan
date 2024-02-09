@@ -5,7 +5,7 @@ const nextConfig = {
     },
 
     env : {
-        DATABASE_URL : 'postgres://postgres.makkfudxyubitrpwjnjl:Nileshanuj@123.@aws-0-ap-south-1.pooler.supabase.com:5432/postgres'
+        DATABASE_URL : ''
     }
 };
 
