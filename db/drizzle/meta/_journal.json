@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1707473062915,
+      "tag": "0000_curvy_fabian_cortez",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1707474953674,
+      "tag": "0001_thick_blindfold",
+      "breakpoints": true
+    }
+  ]
+}
