@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime  @updatedAt @db.Timestamptz(3)
+  accounts      Account[]
+  Booking       Booking[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Turf {
+  id           String       @id @default(cuid())
+  name         String
+  owner        String
+  location     String
+  capacity     Int
+  pricePerHour Int
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  turfImages   TurfImages[]
+  Booking      Booking[]
+}
+
+model TurfImages {
+  id         String   @id @default(cuid())
+  url        String
+  alt        String?
+  uploadedAt DateTime @default(now())
+  turfId     String
+  turf       Turf     @relation(fields: [turfId], references: [id])
+}
+
+enum PaymentMode {
+  UPI
+  COD
+  DEBIT_CARD
+  CREDIT_CARD
+  BANK
+  OTHER
+}
+
+enum Status {
+  pending
+  confirmed
+  rejected
+}
+
+model Booking {
+  id            String      @id @default(cuid())
+  turfId        String
+  userId        String
+  turf          Turf        @relation(fields: [turfId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+  bookingDate   DateTime    @db.Date
+  startTime     DateTime    @db.Timetz(0)
+  endTime       DateTime    @db.Timetz(0)
+  slots         Int         @default(1) @db.SmallInt
+  totalPlayer   Int         @db.SmallInt
+  status        Status
+  paymentMode   PaymentMode
+  rating        Int         @db.SmallInt
+  review        String      @db.Text
+  bookingDoneAt DateTime    @db.Timestamptz(0)
+}

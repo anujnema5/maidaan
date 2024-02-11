@@ -1,9 +1,7 @@
-// MAKING AN INSTANCE OF OUR DB CLIENT
-import postgres from 'postgres';
-import {drizzle} from 'drizzle-orm/postgres-js'
-import 'dotenv/config'
+import { PrismaClient } from '@prisma/client'
 
-const connectionString = process.env.DATABASE_URL as string
-const client = postgres(connectionString)
+declare global {
+    var prisma : PrismaClient | undefined
+}
 
-export const db = drizzle(client)
+export const db = globalThis.prisma || new PrismaClient()
